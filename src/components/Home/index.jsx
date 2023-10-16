@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import reactLogo from '../../assets/react.svg';
+import StudentList from './StudentList';
 import './App.css';
+
+const students = [{
+  name: 'Cosimo',
+},
+{
+  name: 'Carmine',
+},
+{
+  name: 'Mattia',
+},
+];
 
 function Home() {
   const [count, setCount] = useState(0);
@@ -27,9 +39,9 @@ function Home() {
           and save to test HMR
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div>
+        <StudentList students={students} />
+      </div>
     </>
   );
 }
