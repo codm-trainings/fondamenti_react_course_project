@@ -5,12 +5,15 @@ import './App.css';
 
 const students = [{
   name: 'Cosimo',
+  color: 'blue',
 },
 {
   name: 'Carmine',
+  color: 'yellow',
 },
 {
   name: 'Mattia',
+  color: 'green',
 },
 ];
 
