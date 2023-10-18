@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StudentItem from './StudentItem';
+import ClearStudentButton from './ClearStudentButton';
+import AuditLog from './AuditLog';
 
 function StudentList({ students }) {
   const [selectedStudent, setSelectedStudent] = useState();
+  const [selectedGrade, setSelectedGrade] = useState();
+  const [auditLogs, setAuditLogs] = useState([]);
 
   const onSelectedStudent = (student) => {
     console.log('on selected student', student);
@@ -11,8 +15,33 @@ function StudentList({ students }) {
 
   const onStudentClear = () => setSelectedStudent(undefined);
 
+  const buildLogItem = (date, action, changed) => ({
+    timestamp: date.toISOString(),
+    action,
+    changed,
+  });
+
+  useEffect(() => {
+    if (selectedStudent) {
+      setAuditLogs((oldLogs) => [...oldLogs, buildLogItem(new Date(), 'selectedStudent', selectedStudent.name)]);
+    }
+  }, [selectedStudent]);
+
+  useEffect(() => {
+    if (selectedGrade) {
+      setAuditLogs((oldLogs) => [...oldLogs, buildLogItem(new Date(), 'selectedGrade', selectedGrade)]);
+    }
+  }, [selectedGrade]);
+
   return (
     <div>
+      {['A', 'B', 'C', 'D', 'E', 'F'].map((g) => (
+        <button type="button" key={g} onClick={() => setSelectedGrade(g)}>
+          {' '}
+          {g}
+          {' '}
+        </button>
+      ))}
       {selectedStudent && (
         <div>
           <p>
@@ -21,7 +50,7 @@ function StudentList({ students }) {
             {selectedStudent.name}
             {' '}
           </p>
-          <button type="button" onClick={() => onStudentClear()}>Clear</button>
+          <ClearStudentButton onClearClick={onStudentClear} />
         </div>
       )}
       <ul>
@@ -35,6 +64,8 @@ function StudentList({ students }) {
           />
         ))}
       </ul>
+
+      <AuditLog logs={auditLogs} />
     </div>
   );
 }
