@@ -20,13 +20,15 @@ function AppNavbar() {
 
   return (
     <div>
-      <Navbar>
+      <Navbar expand="md">
         <NavbarBrand href="/">BeerStionale</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
             <NavItem>
-              <NavLink href="/">Home</NavLink>
+              <NavLink href="/">
+                Home
+              </NavLink>
             </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
