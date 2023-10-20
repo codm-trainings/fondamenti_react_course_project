@@ -6,16 +6,17 @@ import {
   TableBody,
   TableHeader,
 } from 'react-bs-datatable';
+import { Link } from 'react-router-dom';
 import {
   Container, Row, Table, Col,
 } from 'reactstrap';
 
 // Create table headers consisting of 4 columns.
 const headers = [
-  { title: 'ID', prop: 'id' },
   { title: 'Name', prop: 'name' },
   { title: 'Description', prop: 'description' },
   { title: 'Food Pairing', prop: 'food_pairing' },
+  { title: 'Detail', prop: 'detail', cell: (row) => (<Link to={`/beer/${row.id}`}>See beer</Link>) },
 ];
 
 const sleep = (ms) => new Promise((resolve) => {
@@ -28,12 +29,16 @@ function Home() {
   const [tableData, setTableData] = useState([]);
 
   const cleanData = (dataToClean) => dataToClean.map((b) => ({
-    id: b.id, description: b.description, name: b.name, food_pairing: b.food_pairing.join('/'),
+    id: b.id,
+    description: b.description,
+    name: b.name,
+    food_pairing: b.food_pairing.join('/'),
   }));
+
   // on mount
   useEffect(() => {
     setDataLoading(true);
-    sleep(2000)
+    sleep(0)
       .then(() => fetch('https://api.punkapi.com/v2/beers')
         .then((r) => r.json())
         .then(
