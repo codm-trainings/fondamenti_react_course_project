@@ -19,6 +19,8 @@ const router = createBrowserRouter([
             path: ':beerId',
             element: <BeerDetail />,
           },
+          // nuova pagina che risponde a /:beerId/edit
+          // che ritorna un component con un h2 con scritto beer edit
         ],
       },
     ],
