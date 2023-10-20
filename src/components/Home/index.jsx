@@ -16,7 +16,7 @@ const headers = [
   { title: 'Name', prop: 'name' },
   { title: 'Description', prop: 'description' },
   { title: 'Food Pairing', prop: 'food_pairing' },
-  { title: 'Detail', prop: 'detail', cell: (row) => (<Link to={`/beer/${row.id}`}>See beer</Link>) },
+  { title: 'Detail', prop: 'detail', cell: (row) => (<Link to={`/beers/${row.id}`}>See beer</Link>) },
 ];
 
 const sleep = (ms) => new Promise((resolve) => {

@@ -1,18 +1,76 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-
-
-// Al mount del component, fare un CORRETTO data fetching, gestire loading state ed errore (scritta loading, scritta error)
-// fa un get con fetch https://api.punkapi.com/v2/beers/<id della birra>, l'id della birra e' un parametro nella path
-// gia estratto con useParams
-// la birra recuperata deve essere mostrata
-// mostrare l'immagine in un tag <img href giusto, (nel json l'immagine della birra e' sulla proprieta' image_url)
-// mostrare 3 paragrafi che mostrino ID, nome, descrizione e tagline della birra fetchata, prelevando le proprieta' dal json
-// verificare che cio' funzioni con birre diverse
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import {
+  Button,
+  Card, CardBody, CardSubtitle, CardText, CardTitle, Container,
+} from 'reactstrap';
 
 function BeerDetail() {
   const { beerId } = useParams();
-  return <p>{beerId}</p>;
+
+  const [dataLoading, setDataLoading] = useState(false);
+  const [dataError, setDataError] = useState(false);
+  const [beer, setBeer] = useState();
+
+  // on mount
+  useEffect(() => {
+    setDataLoading(true);
+    fetch(`https://api.punkapi.com/v2/beers/${beerId}`)
+      .then((r) => r.json())
+      .then(
+        ([beerData]) => {
+          setBeer(beerData);
+          setDataLoading(false);
+        },
+      ).catch(() => {
+        setDataError(true);
+        setDataLoading(false);
+      });
+  }, [beerId]);
+
+  return (
+    <Container>
+      {dataLoading && <span> Loading </span>}
+      {dataError && <span>Error loading data, try later</span>}
+      {beer && (
+
+      <Card
+        style={{
+          width: '18rem',
+        }}
+      >
+        <img
+          alt="Sample"
+          src={beer.image_url}
+        />
+        <CardBody>
+          <CardTitle tag="h5">
+            {beer.name}
+            {' '}
+            -
+            {' '}
+            {beer.id}
+            {' '}
+
+          </CardTitle>
+          <CardSubtitle
+            className="mb-2 text-muted"
+            tag="h6"
+          >
+            {beer.tagline}
+          </CardSubtitle>
+          <CardText>
+            {beer.description}
+          </CardText>
+          <Link to={`/beers/${beerId}/edit`}>
+            <Button>Edit</Button>
+          </Link>
+        </CardBody>
+      </Card>
+      )}
+
+    </Container>
+  );
 }
 
 export default BeerDetail;

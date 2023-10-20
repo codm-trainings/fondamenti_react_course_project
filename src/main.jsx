@@ -5,6 +5,7 @@ import BeerDetail from './components/BeerDetail';
 import Home from './components/Home';
 import Layout from './components/Layout';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import BeerEdit from './components/BeerEdit';
 
 const router = createBrowserRouter([
   {
@@ -13,14 +14,16 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       {
-        path: 'beer',
+        path: 'beers',
         children: [
           {
             path: ':beerId',
             element: <BeerDetail />,
           },
-          // nuova pagina che risponde a /:beerId/edit
-          // che ritorna un component con un h2 con scritto beer edit
+          {
+            path: ':beerId/edit',
+            element: <BeerEdit />,
+          },
         ],
       },
     ],
