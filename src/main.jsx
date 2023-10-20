@@ -9,16 +9,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/home" replace />,
-  },
-  {
-    path: '/home',
-    element: <Layout><Home /></Layout>,
-    errorElement: <p>An error happened!</p>,
-  },
-  {
-    path: 'beer/:beerId',
-    element: <BeerDetail />,
+    element: <Layout />,
+    children: [
+      { index: true, element: <Home /> },
+      {
+        path: 'beer',
+        children: [
+          {
+            path: ':beerId',
+            element: <BeerDetail />,
+          },
+        ],
+      },
+    ],
   },
 ]);
 
