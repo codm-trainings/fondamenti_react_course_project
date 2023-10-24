@@ -10,12 +10,15 @@ import { Link } from 'react-router-dom';
 import {
   Container, Row, Table, Col,
 } from 'reactstrap';
+import { pick } from 'lodash/object';
+import { format, parse } from 'date-fns';
 
 // Create table headers consisting of 4 columns.
 const headers = [
   { title: 'Name', prop: 'name' },
   { title: 'Description', prop: 'description' },
   { title: 'Food Pairing', prop: 'food_pairing' },
+  { title: 'First Brewed', prop: 'first_brewed' },
   { title: 'Detail', prop: 'detail', cell: (row) => (<Link to={`/beers/${row.id}`}>See beer</Link>) },
 ];
 
@@ -28,12 +31,15 @@ function Home() {
   const [dataError, setDataError] = useState(false);
   const [tableData, setTableData] = useState([]);
 
-  const cleanData = (dataToClean) => dataToClean.map((b) => ({
-    id: b.id,
-    description: b.description,
-    name: b.name,
-    food_pairing: b.food_pairing.join('/'),
-  }));
+  const cleanData = (dataToClean) => dataToClean.map((b) => {
+    const picked = pick(b, ['id', 'description', 'name']);
+    const parsedBrewDate = parse(b.first_brewed, 'LL/yyyy', new Date());
+    return {
+      ...picked,
+      food_pairing: b.food_pairing.join(' / '),
+      first_brewed: format(parsedBrewDate, 'dd/MM/yyyy'),
+    };
+  });
 
   // on mount
   useEffect(() => {

@@ -88,7 +88,6 @@ function BeerEdit() {
             onFormValidation={validateEditBeer}
           />
           )}
-
         </Col>
       </Row>
 
