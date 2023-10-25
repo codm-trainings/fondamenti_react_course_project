@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import {
+  Button,
   Col,
-  Container, Row,
+  Container, Form, FormFeedback, FormGroup, Input, Label, Row,
 } from 'reactstrap';
-import AppForm from '../common/AppForm';
 
 function BeerEdit() {
   const { beerId } = useParams();
@@ -12,30 +14,19 @@ function BeerEdit() {
   const [dataError, setDataError] = useState(false);
   const [beer, setBeer] = useState();
 
-  const [formConfig, setFormConfig] = useState([
-    {
-      fieldName: 'name',
-      type: 'text',
-      default: '',
-      helpText: 'Inserisci il nome della birra',
-      validationError: "Il nome non e' valido",
+  const { setValues, ...formik } = useFormik({
+    initialValues: {
+      name: '',
+      tagline: '',
+      description: '',
     },
-    {
-      fieldName: 'description',
-      helpText: 'Inserisci la descrizione della birra',
-      validationError: "La descrizione non e' valida",
-    },
-    {
-      fieldName: 'tagline',
-      helpText: 'Inserisci la tagline della birra',
-      validationError: "La tagline non e' valida",
-    },
-    {
-      fieldName: 'image_url',
-      helpText: 'Inserisci il link',
-      type: 'string',
-    },
-  ]);
+    onSubmit: (values) => console.log('submitted!', values),
+    validationSchema: Yup.object({
+      name: Yup.string().required('Inserisci il nome della birra'),
+      tagline: Yup.string().required('Inserisci la tagline della birra').max(10, 'La tagline deve essere massimo di dieci caratter'),
+      description: Yup.string().required('Inserisci una descrizione per la birra').max(50, 'La descrizione deve essere massimo di 50 caratteri'),
+    }),
+  });
 
   // on mount
   useEffect(() => {
@@ -55,25 +46,9 @@ function BeerEdit() {
 
   useEffect(() => {
     if (beer) {
-      setFormConfig((oldConfig) => oldConfig.map((c) => ({ ...c, default: beer[c.fieldName] })));
+      setValues({ name: beer.name, tagline: beer.tagline, description: beer.description });
     }
-  }, [beer]);
-
-  const validateEditBeer = (formValues) => {
-    let errors = { name: null, description: null, tagline: null };
-
-    if (formValues.name === '') {
-      errors = { ...errors, name: formConfig[0].validationError };
-    }
-    if (formValues.tagline === '') {
-      errors = { ...errors, tagline: formConfig[2].validationError };
-    }
-    if (formValues.description === '') {
-      errors = { ...errors, description: formConfig[1].validationError };
-    }
-
-    return errors;
-  };
+  }, [beer, setValues]);
 
   return (
     <Container className="mt-5">
@@ -82,11 +57,57 @@ function BeerEdit() {
       <Row>
         <Col>
           {beer && (
-          <AppForm
-            config={formConfig}
-            onFormSubmit={(values) => console.log('submitted!', values)}
-            onFormValidation={validateEditBeer}
-          />
+            <Form onSubmit={formik.handleSubmit}>
+              <FormGroup>
+                <Label htmlFor="name">
+                  Name
+                </Label>
+                <Input
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  name="name"
+                  id="name"
+                  invalid={formik.errors.name}
+                />
+                <FormFeedback>
+                  {formik.errors.name}
+                </FormFeedback>
+              </FormGroup>
+
+              <FormGroup>
+                <Label htmlFor="description">
+                  Description
+                </Label>
+                <Input
+                  value={formik.values.description}
+                  onChange={formik.handleChange}
+                  name="description"
+                  id="description"
+                  invalid={formik.errors.description}
+
+                />
+                <FormFeedback>
+                  {formik.errors.description}
+                </FormFeedback>
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="tagline">
+                  Tagline
+                </Label>
+                <Input
+                  value={formik.values.tagline}
+                  onChange={formik.handleChange}
+                  name="tagline"
+                  invalid={formik.errors.tagline}
+                  id="tagline"
+                />
+                <FormFeedback>
+                  {formik.errors.tagline}
+                </FormFeedback>
+              </FormGroup>
+
+              <Button type="submit" disabled={!formik.isValid}> Edit beer </Button>
+            </Form>
           )}
         </Col>
       </Row>
