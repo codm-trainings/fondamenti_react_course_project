@@ -8,21 +8,6 @@ import {
   Container, Form, FormFeedback, FormGroup, Input, Label, Row,
 } from 'reactstrap';
 
-
-// Creare una nuova pagina BeerNew, dove ho un form per creare una birra.
-// Formik puo' essere utilizzato
-// La pagina new, sotto il form ha una lista, tale lista in ogni list item ha una descrizione con i campi
-// della birra appena inserita
-// Il form quindi, al submit inserira' la birra, dopo essere stata opportunamente validata in uno stato
-// interno al componente, che avra' una lista delle birre inserite.
-// Tale lista sara' mostrata dal componente sotto al form
-// I CAMPI DELLA BIRRA A CUI SIAMO INTERESSATI, SONO NAME/DESCRIPTION/TAGLINE
-// Per ogni item della lista di sotto, ho un pulsante che mi permette di cancellare quella birra dalla lista.
-// Quando non ho birre inserite, la lista mi mostra un testo che mi comunica che non ci sono birre.
-// Nella lista di sotto, accanto al bottone per cancellare la birra, avro' un bottone edit, che riempie il form sopra con i dati
-// della birra che ho cliccato, e se salvo il form, mi modifica la birra nella lista invece di crearne una nuova.
-
-// Alla fine di ogni inserimento e submit del form, il form deve essere svuotato, ovvero ai valori di default
 function BeerEdit() {
   const { beerId } = useParams();
   const [dataLoading, setDataLoading] = useState(false);
